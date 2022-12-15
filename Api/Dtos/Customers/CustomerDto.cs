@@ -1,6 +1,6 @@
 ﻿namespace Api.Dtos.Customers
 {
-    public class AddCustomerResponseDto
+    public class CustomerDto
     {
         public int Id { get; set; }
         public string Fullname { get; set; }

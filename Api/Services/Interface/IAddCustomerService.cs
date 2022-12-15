@@ -4,6 +4,6 @@ namespace Api.Services.Interface
 {
     public interface IAddCustomerService
     {
-        Task<AddCustomerResponseDto> Create(AddCustomerDto request);
+        Task<CustomerDto> Create(AddCustomerDto request);
     }
 }

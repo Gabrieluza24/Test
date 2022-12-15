@@ -13,6 +13,7 @@ builder.Services.AddDbContext<CustomerContext>(options =>
     options.UseMySql(ConectionString, ServerVersion.AutoDetect(ConectionString)));
 
 builder.Services.AddScoped<IAddCustomerService, AddCustomerService>();
+builder.Services.AddScoped<IGetCustomersService, GetCustomersService>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 builder.Services.AddControllers();

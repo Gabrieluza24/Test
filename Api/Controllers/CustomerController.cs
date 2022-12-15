@@ -9,25 +9,30 @@ namespace Api.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly IAddCustomerService _addCustomer;
+        private readonly IGetCustomersService _getCustomers;
 
-        public CustomerController(IAddCustomerService addCustomer)
+        public CustomerController(
+            IAddCustomerService addCustomer,
+            IGetCustomersService getCustomers
+        )
         {
             _addCustomer = addCustomer;
+            _getCustomers = getCustomers;
         }
 
         // GET: CustomerController
-        [HttpGet(Name = "GetCustomer")]
-        public ActionResult Index()
-        {
-            return Ok();
-        }
-
-        // GET: CustomerController/Details/5
         [HttpGet]
-        [Route("{text}")]
-        public ActionResult Details(int id)
+        public async Task<IActionResult> GetAll()
         {
-            return Ok();
+            try { 
+                List<CustomerDto> response = await _getCustomers.GetAll();
+                return new OkObjectResult(response);
+            }
+            catch(Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+            
         }
 
         // POST: CustomerController/Create
@@ -36,12 +41,12 @@ namespace Api.Controllers
         {
             try
             {
-                AddCustomerResponseDto response = await _addCustomer.Create(request);
+                CustomerDto response = await _addCustomer.Create(request);
                 return new OkObjectResult(response);
             }
-            catch
+            catch(Exception ex)
             {
-                return new BadRequestObjectResult("Error");
+                return new BadRequestObjectResult(ex.Message);
             }
         
         }

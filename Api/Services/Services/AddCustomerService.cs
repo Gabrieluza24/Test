@@ -14,7 +14,7 @@ namespace Api.Services.Services
             _customerRepository = customerRepository;
         }
 
-        public Task<AddCustomerResponseDto> Create(AddCustomerDto request)
+        public Task<CustomerDto> Create(AddCustomerDto request)
         {
             Customer customer = new Customer();
 
@@ -28,7 +28,7 @@ namespace Api.Services.Services
             _customerRepository.Add(customer);
             _customerRepository.SaveChanges();
 
-            AddCustomerResponseDto response = new AddCustomerResponseDto();
+            CustomerDto response = new CustomerDto();
             response.Id = customer.Id;
             response.Fullname = customer.Fullname;
             response.Email = customer.Email;
