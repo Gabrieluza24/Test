@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Dtos.Customers;
+using Api.Services.Interface;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
@@ -6,7 +8,12 @@ namespace Api.Controllers
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
-        public CustomerController() { }
+        private readonly IAddCustomerService _addCustomer;
+
+        public CustomerController(IAddCustomerService addCustomer)
+        {
+            _addCustomer = addCustomer;
+        }
 
         // GET: CustomerController
         [HttpGet(Name = "GetCustomer")]
@@ -25,16 +32,18 @@ namespace Api.Controllers
 
         // POST: CustomerController/Create
         [HttpPost]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create([FromBody] AddCustomerDto request)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                AddCustomerResponseDto response = await _addCustomer.Create(request);
+                return new OkObjectResult(response);
             }
             catch
             {
-                return Ok();
+                return new BadRequestObjectResult("Error");
             }
+        
         }
 
         // PUT: CustomerController/Edit/5

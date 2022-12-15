@@ -1,10 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data.Context;
+using Api.Services.Interface;
+using Api.Services.Services;
+using Infrastructure.Data.Repositories;
+using Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<CustomerContext>(options => options.UseMySql("Server=localhost; Database=WebApi; User ID=root; Password=;", ServerVersion.AutoDetect("Server=localhost; Database=WebApi; User ID=root; Password=;")));
+string ConectionString = "Server=localhost; Database=WebApi; User ID=root; Password=;";
+builder.Services.AddDbContext<CustomerContext>(options =>
+    options.UseMySql(ConectionString, ServerVersion.AutoDetect(ConectionString)));
+
+builder.Services.AddScoped<IAddCustomerService, AddCustomerService>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

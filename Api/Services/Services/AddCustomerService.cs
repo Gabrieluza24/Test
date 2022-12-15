@@ -1,5 +1,6 @@
 ﻿using Api.Dtos.Customers;
 using Api.Services.Interface;
+using Domain.Entities;
 using Domain.Interfaces;
 
 namespace Api.Services.Services
@@ -13,9 +14,28 @@ namespace Api.Services.Services
             _customerRepository = customerRepository;
         }
 
-        public Task<long> Create(AddCustomerDto request)
+        public Task<AddCustomerResponseDto> Create(AddCustomerDto request)
         {
-            throw new NotImplementedException();
+            Customer customer = new Customer();
+
+            customer.Fullname = request.Fullname;
+            customer.Email = request.Email;
+            customer.Address = request.Address;
+            customer.Phone = request.Phone;
+            customer.BirthDate = request.BirthDate;
+            customer.CreatedAt = DateTime.Now;
+
+            _customerRepository.Add(customer);
+            _customerRepository.SaveChanges();
+
+            AddCustomerResponseDto response = new AddCustomerResponseDto();
+            response.Id = customer.Id;
+            response.Fullname = customer.Fullname;
+            response.Email = customer.Email;
+            response.Address = customer.Address;
+            response.Phone = customer.Phone;
+            response.BirthDate = customer.BirthDate;
+            return Task.FromResult(response);
         }
     }
 }
