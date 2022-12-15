@@ -11,19 +11,22 @@ namespace Api.Controllers
         private readonly IAddCustomerService _addCustomer;
         private readonly IGetCustomersService _getCustomers;
         private readonly IUpdateCustomerService _updateCustomer;
+        private readonly IDeleteCustomerService _deleteCustomer;
 
         public CustomerController(
             IAddCustomerService addCustomer,
             IGetCustomersService getCustomers,
-            IUpdateCustomerService updateCustomer
+            IUpdateCustomerService updateCustomer,
+            IDeleteCustomerService deleteCustomer
         )
         {
             _addCustomer = addCustomer;
             _getCustomers = getCustomers;
             _updateCustomer = updateCustomer;
+            _deleteCustomer = deleteCustomer;
         }
 
-        // GET: CustomerController
+        /**Get All Customers Controller*/
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -38,7 +41,7 @@ namespace Api.Controllers
             
         }
 
-        // POST: CustomerController/Create
+        /**Create Customer Controller*/
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddCustomerDto request)
         {
@@ -54,7 +57,7 @@ namespace Api.Controllers
         
         }
 
-        // PUT: CustomerController/Edit/5
+        /**Update Customer Controller*/
         [HttpPut]
         [Route("{id:int}")]
         public async Task<IActionResult> Edit(int id, [FromBody] UpdateCustomerDto request)
@@ -71,17 +74,19 @@ namespace Api.Controllers
 
         }
 
-        // DELETE: CustomerController/Delete/5
+        /**Delete Customer Controller*/
         [HttpDelete]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [Route("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                CustomerDto response = await _deleteCustomer.remove(id);
+                return new OkObjectResult(response);
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok();
+                return new BadRequestObjectResult(ex.Message);
             }
         }
     }
