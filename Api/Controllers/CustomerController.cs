@@ -10,14 +10,17 @@ namespace Api.Controllers
     {
         private readonly IAddCustomerService _addCustomer;
         private readonly IGetCustomersService _getCustomers;
+        private readonly IUpdateCustomerService _updateCustomer;
 
         public CustomerController(
             IAddCustomerService addCustomer,
-            IGetCustomersService getCustomers
+            IGetCustomersService getCustomers,
+            IUpdateCustomerService updateCustomer
         )
         {
             _addCustomer = addCustomer;
             _getCustomers = getCustomers;
+            _updateCustomer = updateCustomer;
         }
 
         // GET: CustomerController
@@ -53,18 +56,20 @@ namespace Api.Controllers
 
         // PUT: CustomerController/Edit/5
         [HttpPut]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [Route("{id:int}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] UpdateCustomerDto request)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                CustomerDto response = await _updateCustomer.update(id,request);
+                return new OkObjectResult(response);
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok();
+                return new BadRequestObjectResult(ex.Message);
             }
-        }
 
+        }
 
         // DELETE: CustomerController/Delete/5
         [HttpDelete]

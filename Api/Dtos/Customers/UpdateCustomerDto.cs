@@ -2,10 +2,10 @@
 {
     public class UpdateCustomerDto
     {
-        string Fullname { get; set; }
-        string Email { get; set; }
-        string Address { get; set; }
-        string Phone { get; set; }
-        DateTime BirthDate { get; set; }
+        public string Fullname { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public string Phone { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 }

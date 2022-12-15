@@ -5,28 +5,27 @@ using Domain.Interfaces;
 
 namespace Api.Services.Services
 {
-    public class AddCustomerService : IAddCustomerService
+    public class UpdateCustomerService : IUpdateCustomerService
     {
         private readonly ICustomerRepository _customerRepository;
 
-        public AddCustomerService(ICustomerRepository customerRepository)
+        public UpdateCustomerService(ICustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
         }
-
-        public Task<CustomerDto> Create(AddCustomerDto request)
+        public Task<CustomerDto> update(int id, UpdateCustomerDto request)
         {
             try
             {
-                Customer customer = new Customer();
-                customer.Fullname = request.Fullname;
+                Customer customer = _customerRepository.GetById(id);
                 customer.Email = request.Email;
-                customer.Address = request.Address;
                 customer.Phone = request.Phone;
+                customer.Address = request.Address;
+                customer.Fullname = request.Fullname;
                 customer.BirthDate = request.BirthDate;
-                customer.CreatedAt = DateTime.Now;
+                customer.UpdatedAt = DateTime.Now;
 
-                _customerRepository.Add(customer);
+                _customerRepository.Update(customer);
                 _customerRepository.SaveChanges();
 
                 CustomerDto response = new CustomerDto();
@@ -37,12 +36,12 @@ namespace Api.Services.Services
                 response.Phone = customer.Phone;
                 response.BirthDate = customer.BirthDate;
                 return Task.FromResult(response);
+
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-           
         }
     }
 }

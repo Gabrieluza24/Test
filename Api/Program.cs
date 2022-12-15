@@ -14,6 +14,8 @@ builder.Services.AddDbContext<CustomerContext>(options =>
 
 builder.Services.AddScoped<IAddCustomerService, AddCustomerService>();
 builder.Services.AddScoped<IGetCustomersService, GetCustomersService>();
+builder.Services.AddScoped<IUpdateCustomerService, UpdateCustomerService>();
+
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 builder.Services.AddControllers();
