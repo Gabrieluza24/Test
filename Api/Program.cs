@@ -25,9 +25,11 @@ builder.Services.AddCors(
 });
 
 // Add services to the container.
-string ConectionString = "Server=localhost; Database=WebApi; User ID=root; Password=;";
+var _configuration = builder.Configuration;
+var dbConnectionString = _configuration.GetConnectionString("DbMysql");
+
 builder.Services.AddDbContext<CustomerContext>(options =>
-    options.UseMySql(ConectionString, ServerVersion.AutoDetect(ConectionString)));
+    options.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString)));
 
 builder.Services.AddScoped<IAddCustomerService, AddCustomerService>();
 builder.Services.AddScoped<IGetCustomersService, GetCustomersService>();
@@ -52,8 +54,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);
 
