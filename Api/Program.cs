@@ -24,31 +24,38 @@ builder.Services.AddCors(
     });
 });
 
-// Add services to the container.
 var _configuration = builder.Configuration;
 var dbConnectionString = _configuration.GetConnectionString("DbMysql");
+Console.WriteLine(dbConnectionString);
 
 builder.Services.AddDbContext<CustomerContext>(options =>
-    options.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString)));
+    options.UseMySql(dbConnectionString,
+    ServerVersion.AutoDetect(dbConnectionString)
+));
 
+/**Service Application*/
 builder.Services.AddScoped<IAddCustomerService, AddCustomerService>();
 builder.Services.AddScoped<IGetCustomersService, GetCustomersService>();
 builder.Services.AddScoped<IUpdateCustomerService, UpdateCustomerService>();
 builder.Services.AddScoped<IDeleteCustomerService, DeleteCustomerService>();
 
+/**Repositories*/
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
+/**Validators*/
 builder.Services.AddTransient<IValidator<AddCustomerDto>, AddCustomerValidator>();
 builder.Services.AddTransient<IValidator<UpdateCustomerDto>, UpdateCustomerValidator>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+using var scope = app.Services.CreateScope();
+await using var dbContext = scope.ServiceProvider.GetRequiredService<CustomerContext>();
+await dbContext.Database.MigrateAsync();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
