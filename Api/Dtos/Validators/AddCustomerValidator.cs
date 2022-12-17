@@ -29,7 +29,7 @@ namespace Api.Dtos.Validators
 
             RuleFor(r => r.BirthDate).NotEmpty()
               .WithMessage("BirthDate is required");
-            RuleFor(r => r.BirthDate).GreaterThanOrEqualTo(DateTime.Now)
+            RuleFor(r => r.BirthDate).LessThanOrEqualTo(DateTime.Now)
                 .WithMessage("Birth date invalid");
         }
     }

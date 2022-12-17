@@ -9,10 +9,10 @@ services:
   database:
     image: mysql:8.0.22
     ports:
-      - "33061:3306"
+      - "3306:3306"
     volumes:
       - datafiles:/var/lib/mysql
-      - "~/sql-scripts/setup.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./Sql-Scripts:/docker-entrypoint-initdb.d"
     restart: always
     environment: 
       MYSQL_ROOT_PASSWORD: Root0++
