@@ -8,11 +8,13 @@ services:
   #DataBase Service
   database:
     image: mysql:8.0.22
+    networks:
+      - application-net  
     ports:
       - "3306:3306"
     volumes:
       - datafiles:/var/lib/mysql
-      - "./Sql-Scripts:/docker-entrypoint-initdb.d"
+      - "./Backend/Sql-Scripts:/docker-entrypoint-initdb.d"
     restart: always
     environment: 
       MYSQL_ROOT_PASSWORD: Root0++
@@ -22,10 +24,12 @@ services:
 
   api:
     build:
-      context: .
+      context: ./Backend
       dockerfile: API/Dockerfile
     depends_on: 
       - database
+    networks:
+      - application-net  
     ports:
       - "49158:80"
       - "49157:443"
@@ -34,3 +38,20 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - "ConnectionStrings:Server=database; Database=webApi; User ID=root; Password=Root0++;"
     restart: always
+
+  angular:
+    build:
+      context: ./Angular
+      dockerfile: Dockerfile
+    networks:
+      - application-net
+    ports:
+      - "4200:80"
+    environment:
+      - production=false,
+      - apiServer='http://localhost:49158/api'
+    restart: always
+
+networks:
+  application-net:
+    driver: bridge

@@ -14,19 +14,19 @@ export class HomeService {
   constructor(private http: HttpClient) { }
 
   public GetCustomers(): Observable<customer[]> {
-    return this.http.get<customer[]>(`${environment.apiServer}/api/Customer`);
+    return this.http.get<customer[]>(`${environment.apiServer}/Customer`);
   }
 
   public CreateCustomer(body: customerRequest): Observable<customer> {
-    return this.http.post<customer>(`${environment.apiServer}/api/Customer`, body);
+    return this.http.post<customer>(`${environment.apiServer}/Customer`, body);
   }
 
   public UpdateCustomer(id: number, body: customerRequest): Observable<customer> {
-    return this.http.put<customer>(`${environment.apiServer}/api/Customer/${id}`, body);
+    return this.http.put<customer>(`${environment.apiServer}/Customer/${id}`, body);
   }
 
   public DeleteCustomer(id: number): Observable<customer> {
-    return this.http.delete<customer>(`${environment.apiServer}/api/Customer/${id}`);
+    return this.http.delete<customer>(`${environment.apiServer}/Customer/${id}`);
   }
 
 }
