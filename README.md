@@ -17,4 +17,4 @@ it will run 3 containers
 - Backend API
 - Frontend SPA
 
-the API will start on http://localhost:49158/ and Application on http://localhost:4200/
+the API will start on http://localhost:49158/swagger and Application on http://localhost:4200/
